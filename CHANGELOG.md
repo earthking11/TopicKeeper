@@ -1,34 +1,58 @@
-# Changelog
+# 更新日志
+
+## 4.0 - 2026-05-19
+
+### 新增
+
+- 新增大幅优化后的图形界面，改为更清晰的文件区、关键词区、处理状态区、流程区和结果区。
+- 新增内嵌确认流程：模型识别完成后，直接在界面中确认“保留哪个议题”和“从哪个后续议题开始涂白”，不再弹出确认窗口。
+- 新增生成结果内嵌展示：输出路径、涂白数量、删除页数和结构检查结果直接显示在主界面。
+- 新增“打开输出文件”按钮，生成完成后可直接打开清洗后的 PDF。
+- 新增选择 PDF 后的后台 OCR 预处理，用户输入关键词时程序可提前完成部分耗时工作。
+- 新增生成后轻量结构完整性检查，自动复查标题、纪要头、目标议题和人员/footer 信息是否仍然保留。
+- 新增预处理开关 `PREPROCESS_AFTER_FILE_SELECT`，需要降低选文件后的即时负载时可关闭。
+
+### 优化
+
+- 优化状态提示，不再用弹窗打断流程；错误、警告和确认信息统一显示在程序界面中。
+- 优化 Tkinter 线程更新方式，后台处理通过主线程安全更新界面状态。
+- 优化确认提示的可见性，按钮上方会直接显示关键确认内容，避免用户盲点确认。
+- 优化生成后结构检查的耗时，使用较低 DPI 的 OCR 复查，尽量减少额外等待。
+
+### 修复
+
+- 修复 footer 锚点落在人员名单行时，上一行“出席”等标签可能被误涂白的问题。
+- 修复异常提示延迟显示时可能丢失异常对象的问题。
 
 ## 3.0 - 2026-05-19
 
-### Added
+### 新增
 
-- Added scan-oriented OCR preprocessing with grayscale enhancement, denoising, sharpening, adaptive thresholding, and high-DPI fallback.
-- Added multi-line title matching for target and next-topic boundaries.
-- Added boundary redactions for target-page top regions, next-topic regions, and unrelated pages between the target and footer.
-- Added support for rotated PDF pages by converting OCR coordinates into PyMuPDF drawing coordinates.
-- Added visual whiteout fallback after redaction to reduce residual pixels in scanned PDFs.
-- Added environment-variable based local LLM configuration:
+- 新增面向扫描 PDF 的 OCR 增强流程，包括灰度增强、去噪、锐化、自适应二值化和高 DPI 兜底识别。
+- 新增多行标题匹配能力，用于更稳地定位目标议题和下一个议题边界。
+- 新增议题边界整段涂白能力，处理目标页上方、下一个议题开始处，以及目标议题和结尾之间的无关整页内容。
+- 新增旋转 PDF 页面支持，将 OCR 坐标转换为 PyMuPDF 绘制坐标，避免涂白位置偏移。
+- 新增 redaction 后的视觉白色覆盖，降低扫描图片中残留像素的概率。
+- 新增基于环境变量的本地大模型配置：
   - `TOPICKEEPER_LLM_BASE_URL`
   - `TOPICKEEPER_LLM_API_KEY`
   - `TOPICKEEPER_LLM_MODEL`
 
-### Changed
+### 优化
 
-- Updated GUI title to `TopicKeeper v3.0`.
-- Improved LLM JSON extraction when the model returns fenced Markdown or extra text.
-- Improved footer, target, and next-topic boundary handling for scanned meeting minutes.
-- Improved README with public-safe setup instructions.
+- 将图形界面标题更新为 `TopicKeeper v3.0`。
+- 优化大模型 JSON 解析，兼容模型返回 Markdown 代码块或额外文本的情况。
+- 优化扫描版会议纪要中的 footer、目标议题和下一个议题边界处理。
+- 优化 README，补充适合公开仓库的安装、运行和本地模型配置说明。
 
-### Fixed
+### 修复
 
-- Fixed residual OCR fragments around topic boundaries in scanned PDFs.
-- Fixed incorrect redaction coordinates for rotated pages.
-- Fixed overly loose title matching that could start at the trailing line of a multi-line title.
-- Fixed next-topic residual text in cross-page topic extraction cases.
+- 修复扫描 PDF 议题边界附近可能残留 OCR 碎片的问题。
+- 修复旋转页面中涂白坐标不正确的问题。
+- 修复多行标题匹配过宽，可能从标题末尾行开始定位的问题。
+- 修复跨页议题提取时下一个议题标题可能残留的问题。
 
-### Security
+### 安全
 
-- Removed hard-coded local model key and model name from the public configuration path.
-- Added ignore rules for local PDFs, generated outputs, logs, caches, and environment files.
+- 移除公开配置路径中的硬编码本地模型密钥和模型名称。
+- 新增忽略规则，避免本地 PDF、生成文件、日志、缓存和环境变量文件被提交到公开仓库。
