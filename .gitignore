@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Local runtime files
+*.log
+.env
+.env.*
+
+# Local documents and generated outputs
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+*_cleaned.*
+*_输出.*
+*_验证.*

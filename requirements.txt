@@ -1,0 +1,5 @@
+pymupdf
+openai
+rapidocr_onnxruntime
+opencv-python
+numpy
